@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成果展示影音平台</title>
+    <style>
+        /* --- 全域可愛風格設定 --- */
+        :root {
+            --bg-color: #fdf6ec; /* 溫暖的米色背景 */
+            --primary-color: #ff9a9e; /* 粉嫩紅 */
+            --secondary-color: #fad0c4; /* 漸層粉 */
+            --accent-110: #a18cd1; /* 110級 紫色系 */
+            --accent-111: #84fab0; /* 111級 綠色系 */
+            --accent-112: #ffecd2; /* 112級 橘色系 */
+            --text-color: #555;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "Heiti TC", sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#ffe4e1 10%, transparent 11%), radial-gradient(#e0ffff 10%, transparent 11%);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0px #fff;
+            letter-spacing: 2px;
+        }
+
+        h2 {
+            color: #ff8e8e;
+            font-weight: normal;
+            margin-bottom: 40px;
+            font-size: 1.2rem;
+        }
+
+        /* --- 容器與區域 --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            background: #fff;
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            margin: 40px 0 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: #666;
+            border: 3px solid;
+        }
+
+        .section-110 .section-title { border-color: var(--accent-110); color: #6a5acd; }
+        .section-111 .section-title { border-color: #4facfe; color: #0083b0; }
+        .section-112 .section-title { border-color: #fcb69f; color: #ff6b6b; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+
+        /* --- 可愛按鈕設計 --- */
+        .video-btn {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 20px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 彈跳效果 */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        .video-btn:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+        }
+
+        .section-110 .video-btn:hover { border-color: var(--accent-110); }
+        .section-111 .video-btn:hover { border-color: #4facfe; }
+        .section-112 .video-btn:hover { border-color: #fcb69f; }
+
+        .btn-icon {
+            /* 修改為適合 Emoji 的樣式 */
+            font-size: 3.5rem; 
+            margin-bottom: 10px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-text {
+            font-size: 1rem;
+            line-height: 1.4;
+            color: #555;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        /* --- 轉盤區塊 --- */
+        .wheel-section {
+            margin-top: 60px;
+            margin-bottom: 60px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 30px;
+            position: relative;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: conic-gradient(
+                #ff9a9e 0% 16.66%, 
+                #fad0c4 16.66% 33.33%, 
+                #a18cd1 33.33% 50%, 
+                #84fab0 50% 66.66%, 
+                #ffecd2 66.66% 83.33%, 
+                #8fd3f4 83.33% 100%
+            );
+            transition: transform 2s cubic-bezier(0.25, 0.1, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 轉盤上的裝飾線 */
+        .wheel::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background-image: 
+                linear-gradient(0deg, transparent 49.5%, #fff 49.5%, #fff 50.5%, transparent 50.5%),
+                linear-gradient(60deg, transparent 49.5%, #fff 49.5%, #fff 50.5%, transparent 50.5%),
+                linear-gradient(120deg, transparent 49.5%, #fff 49.5%, #fff 50.5%, transparent 50.5%);
+        }
+
+        .wheel-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .wheel-btn:active {
+            transform: translate(-50%, -50%) scale(0.95);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #ff6b6b;
+            z-index: 20;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .wheel-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #777;
+        }
+
+        /* --- 影片播放器 (Overlay) --- */
+        #videoOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        #videoPlayerContainer {
+            width: 80%;
+            max-width: 1000px;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            outline: none;
+        }
+
+        #closeBtn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+            transition: transform 0.2s;
+        }
+
+        #closeBtn:hover {
+            transform: scale(1.1);
+            background: #ff5252;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 標題區 -->
+    <h1>✨ 數位學習成果展示 ✨</h1>
+    <h2>點選下方按鈕開始欣賞作品</h2>
+
+    <div class="container">
+        <!-- 110級 區塊 -->
+        <div class="section-110">
+            <div class="section-title">🎓 110級 畢業專題</div>
+            <div class="grid" id="grid-110"></div>
+        </div>
+
+        <!-- 111級 區塊 -->
+        <div class="section-111">
+            <div class="section-title">🌟 111級 畢業專題</div>
+            <div class="grid" id="grid-111"></div>
+        </div>
+
+        <!-- 112級 區塊 -->
+        <div class="section-112">
+            <div class="section-title">🚀 112級 畢業專題</div>
+            <div class="grid" id="grid-112"></div>
+        </div>
+
+        <!-- 幸運大轉盤區塊 -->
+        <div class="wheel-section">
+            <div class="section-title" style="border-color: #ff9a9e; color: #ff6b6b;">🎲 隨機播放：不知道看什麼嗎？</div>
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div class="wheel" id="wheel"></div>
+                <button class="wheel-btn" onclick="spinWheel()">GO!</button>
+            </div>
+            <div class="wheel-text" id="wheelResult">點擊中間按鈕開始旋轉</div>
+        </div>
+    </div>
+
+    <!-- 影片播放遮罩 -->
+    <div id="videoOverlay">
+        <div id="videoPlayerContainer">
+            <video id="mainVideo" controls controlsList="nodownload">
+                <source src="" type="video/mp4">
+                您的瀏覽器不支援影片播放。
+            </video>
+        </div>
+        <button id="closeBtn" onclick="closeVideo()">✖ 關閉影片</button>
+    </div>
+
+    <script>
+        // --- 1. 定義遊戲手把 Emoji 圖示 ---
+        const icon110 = "🎮"; // 110級：遊戲手把
+        const icon111 = "🕹️"; // 111級：遊戲搖桿
+        const icon112 = "👾"; // 112級：像素怪獸
+
+        // 資料設定
+
+        const data110 = [
+            "110級1組 赤崁蒼穹_入城 (720p).mp4",
+            "110級2組 向勇士祈願_數位遊戲式智力測驗 (720p).mp4",
+            "110級3組 源初之海-洋流定位探究複合式遊戲(720p).mp4",
+            "110級4組 蓮漪_2D逃脫解謎遊戲 (360p).mp4",
+            "110級5組 蛙蛙墜地_青蛙養成教育遊戲 (720p).mp4",
+            "110級6組 塔克與貓-2D像素卷軸異界冒險遊戲 (720p).mp4",
+            "110級7組 裂縫中的時代碎片_基於位置感應之實境解謎遊戲 (360p).mp4",
+            "110級8組 數位藝術互動系統_以星空為例 (720p).mp4",
+            "110級9組 蛋蛋小精靈_巧克力派爭霸戰 (720p).mp4",
+            "110級10組 拔Slay - 結合AR與Arduino之桌遊設計 (480p).mp4", 
+            "110級12組 結合 AI 情緒分析之互動機器人建立具體驗經濟之情感咖啡攤 (360p).mp4",
+            "110級13組 呈你即言-研發線上即時同步聽打媒合服務系統以提升聽障者之學習及生活品質 (720p).mp4",
+            "110級14組 新手學股票_結合股價線圖之互動式學習系統 (360p).mp4",
+            "110級15組 學生面對預期性壓力對於陳述性記憶影響之研究 (720p).mp4",
+            "110級16組 Dr. OSCE_ 行動情境式臨床思維模擬測驗學習服務 (360p).mp4"
+        ];
+
+        const data111 = [
+            "111級畢業專題 第01組 癮謎_2D解謎遊戲 (1080p).mp4",
+            "111級畢業專題 第02組 心靈獵手 (1080p).mp4",
+            "111級畢業專題 第03組 深淵中的希望_心理探索型動畫遊戲 (1080p).mp4",
+            "111級畢業專題 第04組 求救訊號_2D逃脫解謎遊戲 (480p).mp4",
+            "111級畢業專題 第05組 VR冒險_奇幻之旅 (720p).mp4",
+            "111級畢業專題 第06組 檢舉達人 (1080p).mp4",
+            "111級畢業專題 第07組 甘單心蔘活 (1080p).mp4",
+            "111級畢業專題 第08組 高山流水-不必當伯牙也會寫的音樂日記 (480p).mp4",
+            "111級畢業專題 第09組 皆 中! カイチュー! (1080p).mp4",
+            "111級畢業專題 第10組 異援戰疫_基於Beacon定位技術之實境共享互助遊戲實況平台 (720p60fps).mp4",
+            "111級畢業專題 第11組 米奧王國_跨平台遊戲化課室管理系統 (1080p).mp4",
+            "111級畢業專題 第12組 Your Style_基於學習行為分析之學習風格預測系統發展與評估 (480p).mp4",
+            "111級畢業專題 第13組 設計一套可藉由溝通聊天以陪伴年長者並建立感情的機器人機制 (1080p).mp4",
+            "111級畢業專題 第14組 疫起樂活_在新冠肺炎疫情下的維繫國民健康樂活之系統建置與開發 (1080p).mp4",
+            "111級畢業專題 第15組 Dr. Rehab_ 行動遊戲式復健系統服務 (1080p).mp4"
+        ];
+
+        // 112級 更新資料：依據 112級-2.JPG 修正 (底線替代冒號，空格調整)
+        const data112 = [
+            "南大數位112級畢業專題trailer01IoTeaching預告片v2(720p).mp4",
+            "南大數位112級畢業專題trailer02小小夢想家(720p60fps).mp4",
+            "南大數位112級畢業專題trailer03魔數世界-數學教育遊戲(1080p).mp4",
+            "南大數位112級畢業專題trailer04打火小英雄_虛擬實境教學應用教材開發與教學實施以防風林森林大火室內火災為例完整影片(1080p).mp4",
+            "南大數位112級畢業專題trailer05VR探究教學共享平台(1080p).mp4",
+            "南大數位112級畢業專題trailer06TEACHAR-AR教育平台開發(1080p).mp4",
+            "南大數位112級畢業專題trailer07謎魍-臺灣鬼怪文學之遊戲化數位學習(1080p).mp4",
+            "南大數位112級畢業專題trailer08百年南遇_基於PixiJS與LINE Bot之解謎遊戲(1080p).mp4",
+            "南大數位112級畢業專題trailer09徜徉藝世界-結合SinGAN與橫向卷軸遊戲培養美術能力(1080p).mp4",
+            "南大數位112級畢業專題trailer10古都之內_時光記憶-孔廟實境解謎遊戲(1080p).mp4",
+            "南大數位112級畢業專題trailer11道路安全_機車行駛模擬器(480p).mp4",
+            "南大數位112級畢業專題trailer12罐洋-虛擬實境海洋汙染冒險之旅(1080p).mp4",
+            "南大數位112級畢業專題trailer13追憶 _ 3D解謎遊戲(1080p).mp4",
+            "南大數位112級畢業專題trailer14疫尋皇傑_永憎-介紹疾病知識之回合制PVE戰略遊戲(1080p).mp4",
+            "南大數位112級畢業專題trailer15守獵_融合動物保育概念之塔防手遊(1080p).mp4",
+            "南大數位112級畢業專題trailer16食力派對-營養知識線上派對遊戲(720p60fps).mp4"
+        ];
+
+        // 整合所有影片資料，供轉盤使用
+        const allVideos = [
+            ...data110.map(f => ({ folder: '110級', file: f })),
+            ...data111.map(f => ({ folder: '111級', file: f })),
+            ...data112.map(f => ({ folder: '112級', file: f }))
+        ];
+
+        // 產生按鈕的函數
+        function createButtons(folderName, fileList, containerId, iconChar) {
+            const container = document.getElementById(containerId);
+            fileList.forEach(filename => {
+                // --- 1. 處理顯示文字 (Display Name) ---
+                let displayName = filename.replace('.mp4', '');
+
+                // --- 2. 移除解析度資訊 ---
+                displayName = displayName.replace(/\s*\([^)]*\)$/, '');
+
+                // --- 3. 移除級別與組別前綴 ---
+                if (folderName === '110級') {
+                    displayName = displayName.replace(/^110級\d+組\s*/, '');
+                }
+                if (folderName === '111級') {
+                    displayName = displayName.replace(/^111級畢業專題 第\d+組\s*/, '');
+                }
+                if (folderName === '112級') {
+                    // 更新正則表達式，適應 trailer 後面沒有空格的情況
+                    const match = displayName.match(/trailer\s*(\d+)\s*(.*)/);
+                    if (match) {
+                        const title = match[2];
+                        displayName = title; 
+                    } else if (displayName.includes('｜')) {
+                        const parts = displayName.split('｜');
+                        displayName = parts[parts.length - 1].trim(); 
+                    }
+                }
+
+                if (folderName !== '112級') {
+                    displayName = displayName.trim();
+                    if (displayName.startsWith('_')) {
+                        displayName = displayName.substring(1).trim();
+                    }
+                }
+
+                const btn = document.createElement('button');
+                btn.className = 'video-btn';
+                btn.innerHTML = `
+                    <div class="btn-icon">${iconChar}</div>
+                    <div class="btn-text">${displayName}</div>
+                `;
+                
+                btn.onclick = function() {
+                    const fullPath = folderName + '/' + encodeURIComponent(filename); 
+                    playVideo(fullPath, filename); 
+                };
+
+                container.appendChild(btn);
+            });
+        }
+
+        // 執行產生按鈕
+        createButtons('110級', data110, 'grid-110', icon110);
+        createButtons('111級', data111, 'grid-111', icon111);
+        createButtons('112級', data112, 'grid-112', icon112);
+
+
+        // --- 幸運轉盤邏輯 ---
+        let isSpinning = false;
+        let currentDeg = 0;
+
+        function spinWheel() {
+            if (isSpinning) return;
+            isSpinning = true;
+
+            const wheel = document.getElementById('wheel');
+            const resultText = document.getElementById('wheelResult');
+            resultText.innerText = "轉動中...";
+
+            const randomDeg = Math.floor(Math.random() * 360);
+            const totalDeg = currentDeg + 1800 + randomDeg;
+            currentDeg = totalDeg;
+
+            wheel.style.transform = `rotate(${currentDeg}deg)`;
+
+            setTimeout(() => {
+                isSpinning = false;
+                
+                const randomVideo = allVideos[Math.floor(Math.random() * allVideos.length)];
+                
+                resultText.innerText = `選中了：${randomVideo.file.replace('.mp4', '').replace(/\(.*\)/, '')}`;
+                const fullPath = randomVideo.folder + '/' + encodeURIComponent(randomVideo.file);
+                
+                setTimeout(() => {
+                    playVideo(fullPath, randomVideo.file);
+                }, 800);
+
+            }, 2000);
+        }
+
+        // --- 播放器邏輯 ---
+        const overlay = document.getElementById('videoOverlay');
+        const video = document.getElementById('mainVideo');
+
+        function playVideo(src, originalFilename) {
+            video.src = src;
+            overlay.style.display = 'flex';
+            
+            video.onerror = function() {
+                let readableName = decodeURIComponent(originalFilename);
+                alert("無法播放影片！\n\n系統找不到檔案：\n" + readableName + "\n\n請確認：\n1. 您的資料夾名稱是否正確\n2. 檔案名稱是否完全一致（特別注意空格與底線）");
+            };
+
+            video.play().catch(e => {
+                console.log("自動播放被阻擋", e);
+            });
+        }
+
+        function closeVideo() {
+            video.pause();
+            video.currentTime = 0;
+            video.src = "";
+            video.onerror = null;
+            overlay.style.display = 'none';
+        }
+
+        video.addEventListener('ended', () => {
+            closeVideo();
+        });
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeVideo();
+            }
+        });
+
+    </script>
+</body>
+</html>
